@@ -9,8 +9,21 @@
 
 
 
+
 .App-header {
-  background-color: #282c34;
+  background-color: #518FBC;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  transition: .3s;
+}
+
+.app__light {
+  background-color: rgb(42, 70, 179);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -18,16 +31,28 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  transition: .3s;
 }
-
-.app__light {
+.widget{
   background-color: white;
-  min-height: 100vh;
+  border-radius:16px ;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: #282c34;
+  width: 250px;
+  height: 350px;
+  margin: 30px auto;
+  padding: 6px;
+  box-shadow: 0 2px 10px rgb(0, 0, 0, 0.1);
+}
+.widget__light{
+  background-color: black;
+}
+
+.app-name{
+  color:white
+}
+
+.app-name__light{
+  color:black
 }
