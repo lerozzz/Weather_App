@@ -38,8 +38,10 @@ function App() {
     const weatherResponse = await fetch(
       `${api.weather}?lat=${lat}&lon=${lon}&appid=${api.key}&units=metric`
     ).then((res) => res.json());
-    console.log(weatherResponse);
+    console.log(weatherResponse, '2222');
     setWeather(weatherResponse);
+
+
   };
 
   return (
