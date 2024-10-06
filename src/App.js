@@ -13,7 +13,7 @@ const api = {
 
 function App() {
   const [cityName, setCityName] = useState("");
-  const [weather, setWeather] = useState({});
+  const [weather, setWeather] = useState([]);
   const { theme, setTheme } = useTheme();
   const appCalc = `App-header ${theme === "light" ? "app__light" : ""}`;
   const appWidget = `widget ${theme === "light" ? "widget__light" : ""}`;
@@ -23,8 +23,6 @@ function App() {
   // console.log(theme, 111);
   // console.log(toggleTheme, 33333);
 
-  const weatherTemp = Math.round(weather?.main?.temp); //проверка на истинность
-  const weatherCond = weather?.weather?.[0]?.main;
   const icon = weather?.weather?.[0]?.icon;
 
   const seacrhPressed = async (input) => {
@@ -38,8 +36,8 @@ function App() {
     const weatherResponse = await fetch(
       `${api.weather}?lat=${lat}&lon=${lon}&appid=${api.key}&units=metric`
     ).then((res) => res.json());
-    console.log(weatherResponse);
-    setWeather(weatherResponse);
+    // console.log(weatherResponse, 2222);
+    setWeather((prev) => [...prev, weatherResponse]);
   };
 
   return (
@@ -49,20 +47,35 @@ function App() {
         <h1 className={appName}>Weather App</h1>
         {/* Seacrh Box */}
         <Input seacrhPressed={seacrhPressed} />
-        <main>
-          <div className={appWidget}>
-            {/* Location */}
-            <p>{cityName ? cityName : "City"}</p>
-            <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />
-            {/* Temperature */}
-            {/* {weather && weather.main && weather.main.temp} */}
-            <p>
-              {" "}
-              {weatherTemp.toString() ? `${weatherTemp} °C` : "Temperature"}
-            </p>
-            {/* Condition(Sunny) */}
-            <p>{weatherCond ? `${weatherCond}` : "Condition"}</p>
-          </div>
+        <main
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "flex-start",
+            columnGap: "24px",
+            flexWrap: "wrap",
+          }}
+        >
+          {weather?.map((weather, index) => {
+            const weatherCond = weather?.weather?.[0]?.main;
+            const weatherTemp = Math.round(weather?.main?.temp); //проверка на истинность
+
+            return (
+              <div key={index} className={appWidget}>
+                {/* Location */}
+                <p>{weather?.name || "City"}</p>
+                <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />
+                Temperature
+                {weather?.main?.temp}
+                <p>
+                  {" "}
+                  {weatherTemp.toString() ? `${weatherTemp} °C` : "Temperature"}
+                </p>
+                Condition(Sunny)
+                <p>{weatherCond ? `${weatherCond}` : "Condition"}</p>
+              </div>
+            );
+          })}
         </main>
         <ThemeSwitcher />
       </header>
