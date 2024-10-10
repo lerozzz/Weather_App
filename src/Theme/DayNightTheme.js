@@ -17,6 +17,7 @@ const ThemeChanger = ({ children }) => {
 export default ThemeChanger;
 
 export const useTheme = () => {
-    return useContext(ThemeContext);
-
+    const { theme, toggleTheme } = useContext(ThemeContext);
+    const isLightTheme = theme === 'light';
+    return { isLightTheme, toggleTheme }
 }

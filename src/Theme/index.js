@@ -5,7 +5,7 @@ const ThemeSwitcher = () => {
   const { theme, toggleTheme } = useTheme();
   return (
     <div>
-      <button onClick={toggleTheme}>Переключить тему</button>
+      <button onClick={toggleTheme}>Switch Theme</button>
       {/* <p className="themeName">Ваша тема: {theme}</p> */}
     </div>
   );

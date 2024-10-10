@@ -1,0 +1,13 @@
+.close-button {
+    fill: black;
+    transition: all .3s ease 0s;
+}
+
+.close-button__light {
+    fill: rgb(81, 61, 213);
+    transition: all .3s ease 0s;
+}
+
+.close-button:hover {
+    fill: red;
+}
