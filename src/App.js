@@ -6,7 +6,7 @@ import { useTheme, ThemeChanger } from "./Theme/DayNightTheme";
 import ThemeSwitcher from "./Theme";
 import CloseIcon from "./ButtonClose/CloseIcon";
 import ButtonClose from "./ButtonClose";
-
+import getSameElement from "./utils/findSameElement";
 
 const api = {
   key: "b4b36cff5b22e8f19568c41f46dbff9f",
@@ -15,17 +15,16 @@ const api = {
 };
 
 function App() {
-  const [cityName, setCityName] = useState("");
   const [weather, setWeather] = useState([]);
   const { isLightTheme } = useTheme();
-
+  const [isResponseFly, setIsResponseFly] = useState(false);
   const appCalc = `App-header ${isLightTheme ? "app__light" : ""}`;
   const appWidget = `widget ${isLightTheme ? "widget__light" : ""}`;
   const appName = `app-name ${isLightTheme ? "app-name__light" : ""}`;
 
-
   const seacrhPressed = async (input) => {
-    setCityName(input);
+    setIsResponseFly(true);
+
     const [cityInfo] = await fetch(
       `${api.geocoding}?q=${input}&appid=${api.key}`
     ).then((res) => res.json());
@@ -35,9 +34,15 @@ function App() {
     const weatherResponse = await fetch(
       `${api.weather}?lat=${lat}&lon=${lon}&appid=${api.key}&units=metric`
     ).then((res) => res.json());
-    console.log(weatherResponse, 2222);
+
+    const haveSameElement = getSameElement(weatherResponse, weather);
+    console.log(haveSameElement);
+    if (haveSameElement === true) {
+      setIsResponseFly(false);
+      return alert("Уже было");
+    }
     setWeather((prev) => [...prev, weatherResponse]);
-    console.log(weather, 90);
+    setIsResponseFly(false);
   };
 
   const removeWidget = (index) => {
@@ -50,7 +55,7 @@ function App() {
         {/* Header */}
         <h1 className={appName}>Weather App</h1>
         {/* Seacrh Box */}
-        <Input seacrhPressed={seacrhPressed} />
+        <Input seacrhPressed={seacrhPressed} isResponseFly={isResponseFly} />
         <div className="widget-wrapper">
           {weather?.map((weather, index) => {
             const weatherCond = weather?.weather?.[0]?.main;
@@ -59,11 +64,9 @@ function App() {
 
             return (
               <div key={index} className={appWidget}>
-                <ButtonClose
-                  removeWidget={() => removeWidget(index)}
-                />
+                <ButtonClose removeWidget={() => removeWidget(index)} />
                 {/* Location */}
-                <p>{weather?.name || "City"}</p>
+                <p className="city-name">{weather?.name || "City"}</p>
                 <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />
                 {/* Temperature */}
                 <p>

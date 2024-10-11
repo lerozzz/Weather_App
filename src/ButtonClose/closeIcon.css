@@ -1,6 +1,7 @@
 .close-button {
     fill: black;
     transition: all .3s ease 0s;
+    
 }
 
 .close-button__light {
