@@ -7,6 +7,8 @@ import ThemeSwitcher from "./Theme";
 import CloseIcon from "./ButtonClose/CloseIcon";
 import ButtonClose from "./ButtonClose";
 import getSameElement from "./utils/findSameElement";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const api = {
   key: "b4b36cff5b22e8f19568c41f46dbff9f",
@@ -22,27 +24,35 @@ function App() {
   const appWidget = `widget ${isLightTheme ? "widget__light" : ""}`;
   const appName = `app-name ${isLightTheme ? "app-name__light" : ""}`;
 
+  const notify = () => toast.error("This city already exist", {
+    position: "bottom-right"
+  });
+
   const seacrhPressed = async (input) => {
     setIsResponseFly(true);
+    try {
+      const [cityInfo] = await fetch(
+        `${api.geocoding}?q=${input}&appid=${api.key}`
+      ).then((res) => res.json());
 
-    const [cityInfo] = await fetch(
-      `${api.geocoding}?q=${input}&appid=${api.key}`
-    ).then((res) => res.json());
+      const { lat, lon } = cityInfo;
 
-    const { lat, lon } = cityInfo;
+      const weatherResponse = await fetch(
+        `${api.weather}?lat=${lat}&lon=${lon}&appid=${api.key}&units=metric`
+      ).then((res) => res.json());
 
-    const weatherResponse = await fetch(
-      `${api.weather}?lat=${lat}&lon=${lon}&appid=${api.key}&units=metric`
-    ).then((res) => res.json());
-
-    const haveSameElement = getSameElement(weatherResponse, weather);
-    console.log(haveSameElement);
-    if (haveSameElement === true) {
+      const haveSameElement = getSameElement(weatherResponse, weather);
+      console.log(haveSameElement);
+      if (haveSameElement === true) {
+        setIsResponseFly(false);
+        return notify();
+      }
+      setWeather((prev) => [...prev, weatherResponse]);
       setIsResponseFly(false);
-      return alert("Уже было");
+    } catch (error) {
+      console.error("Ошибка при загрузке данных:", error);
+      setIsResponseFly(false);
     }
-    setWeather((prev) => [...prev, weatherResponse]);
-    setIsResponseFly(false);
   };
 
   const removeWidget = (index) => {
@@ -52,6 +62,8 @@ function App() {
   return (
     <div className="App">
       <main className={appCalc}>
+        <ToastContainer />
+        <ThemeSwitcher />
         {/* Header */}
         <h1 className={appName}>Weather App</h1>
         {/* Seacrh Box */}
@@ -79,7 +91,6 @@ function App() {
             );
           })}
         </div>
-        <ThemeSwitcher />
       </main>
     </div>
   );
