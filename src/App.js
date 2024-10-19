@@ -1,14 +1,12 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "./Input";
-import { useTheme, ThemeChanger } from "./Theme/DayNightTheme";
+import { useTheme } from "./Theme/DayNightTheme";
 import ThemeSwitcher from "./Theme";
-import CloseIcon from "./ButtonClose/CloseIcon";
 import ButtonClose from "./ButtonClose";
 import getSameElement from "./utils/findSameElement";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const api = {
   key: "b4b36cff5b22e8f19568c41f46dbff9f",
@@ -24,9 +22,15 @@ function App() {
   const appWidget = `widget ${isLightTheme ? "widget__light" : ""}`;
   const appName = `app-name ${isLightTheme ? "app-name__light" : ""}`;
 
-  const notify = () => toast.error("This city already exist", {
-    position: "bottom-right"
-  });
+  const notify = () =>
+    toast.error("This city already exist", {
+      position: "bottom-right",
+    });
+
+  const erroeCity = () =>
+    toast.error("This city doesn't exist", {
+      position: "bottom-right",
+    });
 
   const seacrhPressed = async (input) => {
     setIsResponseFly(true);
@@ -42,7 +46,7 @@ function App() {
       ).then((res) => res.json());
 
       const haveSameElement = getSameElement(weatherResponse, weather);
-      console.log(haveSameElement);
+
       if (haveSameElement === true) {
         setIsResponseFly(false);
         return notify();
@@ -50,10 +54,22 @@ function App() {
       setWeather((prev) => [...prev, weatherResponse]);
       setIsResponseFly(false);
     } catch (error) {
-      console.error("Ошибка при загрузке данных:", error);
       setIsResponseFly(false);
+      return erroeCity();
     }
   };
+
+  useEffect(() => {
+    const weather = JSON.parse(localStorage.getItem("weather"));
+    if (weather) {
+      setWeather(weather);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (weather.length === 0) return;
+    localStorage.setItem("weather", JSON.stringify(weather));
+  }, [weather]);
 
   const removeWidget = (index) => {
     setWeather((el) => el.filter((_, i) => i !== index));
@@ -73,7 +89,6 @@ function App() {
             const weatherCond = weather?.weather?.[0]?.main;
             const weatherTemp = Math.round(weather?.main?.temp); //проверка на истинность
             const icon = weather?.weather?.[0]?.icon;
-
             return (
               <div key={index} className={appWidget}>
                 <ButtonClose removeWidget={() => removeWidget(index)} />
