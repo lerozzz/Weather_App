@@ -69,6 +69,7 @@ function App() {
   useEffect(() => {
     if (weather.length === 0) return;
     localStorage.setItem("weather", JSON.stringify(weather));
+    console.log(weather.at(-1), 111);
   }, [weather]);
 
   const removeWidget = (index) => {
