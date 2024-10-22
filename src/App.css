@@ -35,7 +35,7 @@
   color: #336182;
   -webkit-box-reflect: below 1px linear-gradient(transparent, white);
   outline: none;
-  animation: animate 5s infinite;
+  /* animation: animate 5s infinite; */
   margin: 50px;
 }
 
@@ -90,8 +90,8 @@
 }
 
 .widget {
-  min-width: 145px;
-  max-width: 145px;
+  min-width: 200px;
+  max-width: 200px;
   row-gap: 12px;
   background-color: white;
   border-radius: 16px;
@@ -110,9 +110,7 @@
   }
 }
 
-.widget:last-child {
-  animation: widget-animate 5s infinite;
-}
+
 
 @keyframes widget-animate {
   0% {

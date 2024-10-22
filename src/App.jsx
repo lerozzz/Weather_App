@@ -1,12 +1,12 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createRef } from "react";
 import Input from "./Input";
 import { useTheme } from "./Theme/DayNightTheme";
 import ThemeSwitcher from "./Theme";
-import ButtonClose from "./ButtonClose";
 import getSameElement from "./utils/findSameElement";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Widgets } from "./Widgets";
 
 const api = {
   key: "b4b36cff5b22e8f19568c41f46dbff9f",
@@ -19,7 +19,7 @@ function App() {
   const { isLightTheme } = useTheme();
   const [isResponseFly, setIsResponseFly] = useState(false);
   const appCalc = `App-header ${isLightTheme ? "app__light" : ""}`;
-  const appWidget = `widget ${isLightTheme ? "widget__light" : ""}`;
+
   const appName = `app-name ${isLightTheme ? "app-name__light" : ""}`;
 
   const notify = () =>
@@ -27,7 +27,7 @@ function App() {
       position: "bottom-right",
     });
 
-  const erroeCity = () =>
+  const errorCity = () =>
     toast.error("This city doesn't exist", {
       position: "bottom-right",
     });
@@ -51,11 +51,15 @@ function App() {
         setIsResponseFly(false);
         return notify();
       }
-      setWeather((prev) => [...prev, weatherResponse]);
+      setWeather((prev) => [
+        ...prev,
+        { ...weatherResponse, nodeRef: createRef(null) },
+      ]);
+
       setIsResponseFly(false);
     } catch (error) {
       setIsResponseFly(false);
-      return erroeCity();
+      return errorCity();
     }
   };
 
@@ -85,28 +89,7 @@ function App() {
         <h1 className={appName}>Weather App</h1>
         {/* Seacrh Box */}
         <Input seacrhPressed={seacrhPressed} isResponseFly={isResponseFly} />
-        <div className="widget-wrapper">
-          {weather?.map((weather, index) => {
-            const weatherCond = weather?.weather?.[0]?.main;
-            const weatherTemp = Math.round(weather?.main?.temp); //проверка на истинность
-            const icon = weather?.weather?.[0]?.icon;
-            return (
-              <div key={index} className={appWidget}>
-                <ButtonClose removeWidget={() => removeWidget(index)} />
-                {/* Location */}
-                <p className="city-name">{weather?.name || "City"}</p>
-                <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />
-                {/* Temperature */}
-                <p>
-                  {" "}
-                  {weatherTemp.toString() ? `${weatherTemp} °C` : "Temperature"}
-                </p>
-                {/* Condition */}
-                <p>{weatherCond ? `${weatherCond}` : "Condition"}</p>
-              </div>
-            );
-          })}
-        </div>
+        <Widgets weather={weather} removeWidget={removeWidget} />
       </main>
     </div>
   );
