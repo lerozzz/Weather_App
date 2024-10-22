@@ -13,7 +13,7 @@ export const Widget = (props) => {
       <ButtonClose removeWidget={removeWidget}>&times;</ButtonClose>
       {/* Location */}
       <p className="city-name">{name}</p>
-      <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />.
+      <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />
       {/* Temperature */}
       <p> {weatherTemp.toString() ? `${weatherTemp} °C` : "Temperature"}</p>
       {/* Condition */}
