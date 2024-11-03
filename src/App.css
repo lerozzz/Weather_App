@@ -9,14 +9,14 @@
 }
 
 .App-header {
-  background-color: #518FBC;
+  background-color:rgb(75 173 197);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: black;
+  color: navy;
   transition: .3s;
 }
 
@@ -30,48 +30,21 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+@font-face {
+  font-family: WeatherFont; 
+  src: url("C:\Users\Lerak\Downloads\sweater_weather\Sweater Weather.otf");
+}
 
 .app-name {
-  color: #336182;
-  -webkit-box-reflect: below 1px linear-gradient(transparent, white);
+  color: white;
+  -webkit-box-reflect: below 1px linear-gradient( white);
   outline: none;
   animation: animate 5s infinite;
-  margin: 50px;
+  margin: 30px;
+  font-family: WeatherFont;
+  font-size: 100px;
 }
 
-@keyframes animate {
-
-  0%,
-  18%,
-  20%,
-  50.1%,
-  60%,
-  65.1%,
-  80%,
-  90.1%,
-  92% {
-    color: #336182;
-    text-shadow: none;
-  }
-
-  18.1%,
-  20.1%,
-  30%,
-  50%,
-  60.1%,
-  65%,
-  80.1%,
-  90%,
-  92.1%,
-  100% {
-    color: white;
-    text-shadow: 0 0 10px #518FBC,
-      0 0 20px #518FBC,
-      0 0 40px #518FBC,
-      0 0 80px #518FBC,
-      0 0 100px #518FBC,
-  }
-}
 
 .app-name__light {
   color: black
@@ -93,7 +66,7 @@
   min-width: 200px;
   max-width: 200px;
   row-gap: 12px;
-  background-color: white;
+  background-color: rgba(198,224,239,255);
   border-radius: 16px;
   display: flex;
   flex-direction: column;
@@ -149,19 +122,89 @@ p {
     font-size: 18px;
   }
 }
+.mainDivInput{
+  display: flex;
+  /* width: 340px; */
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
 
-.input-form {
-  width: 200px;
-  height: 15px;
-  padding: 5px 10px 5px 10px;
-  border: 1px solid #999;
-  font-size: 16px;
-  font-family: Tahoma;
+}
+.inputBox{
+  position: relative;
+  width: 250px;
+  height: 34px;
+  border: 1px solid white;
+  padding: 1px;
+  border-radius: 10px;
+  display: flex;
 }
 
-.search-button {
-  font-size: 16px;
+.inputBox input {
+  padding: 0px;
+  border: none;
+  background: rgb(75 173 197);
+  outline: none;
+  color: white;
+  font-size: 21px;
+  font-family:Tahoma;
+  border-radius: inherit;
+}
+
+.inputBox span {
+  position: absolute;
+  left:6px ;
+  top: 6px;
+  color: white;
+  font-size: 21px;
+  pointer-events: none;
+  text-transform: uppercase;
   font-family: Tahoma;
+  transition: 0.5s;
+}
+.inputBox__light input  {
+  background: rgb(42, 70, 179);
+}
+
+.inputBox input:valid ~ span,
+.inputBox input:focus ~ span
+{
+  left:10px;
+  top: -7px;
+  color: aquamarine;
+  font-size: 10px;
+  background: rgb(75 173 197);
+  letter-spacing: 2px;
+  border-left: 1px solid aquamarine ;
+  border-right: 1px solid aquamarine;
+  padding: 0 5px;
+}
+
+.inputBox__light  input:valid ~ span,
+.inputBox__light  input:focus ~ span
+{
+  background: rgb(42, 70, 179);
+}
+
+.inputButtonWrapper{
+  position: relative;
+  width: 90px;
+  height: 100%;
+}
+.search-button {
+  border: 1px solid white;
+  background: rgb(75 173 197);
+  color: white;
+  border-radius: 10px;
+  font-size: 21px;
+  font-family: Tahoma;
+  text-transform: uppercase;
+  padding: 6px;
+}
+.search-button__light {
+  border: 1px solid white;
+  background-color: rgb(42, 70, 179);
 }
 
 .switch-button {

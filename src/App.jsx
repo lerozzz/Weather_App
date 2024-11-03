@@ -7,19 +7,14 @@ import getSameElement from "./utils/findSameElement";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Widgets } from "./Widgets";
-
-const api = {
-  key: "b4b36cff5b22e8f19568c41f46dbff9f",
-  weather: "https://api.openweathermap.org/data/2.5/weather",
-  geocoding: "https://api.openweathermap.org/geo/1.0/direct",
-};
+import { getWeather } from "./utils/getWeather";
 
 function App() {
   const [weather, setWeather] = useState([]);
   const { isLightTheme } = useTheme();
   const [isResponseFly, setIsResponseFly] = useState(false);
   const appCalc = `App-header ${isLightTheme ? "app__light" : ""}`;
-
+  const appInputBox = `inputBox ${isLightTheme ? "inputBox__light" : ""}`;
   const appName = `app-name ${isLightTheme ? "app-name__light" : ""}`;
 
   const notify = () =>
@@ -35,16 +30,7 @@ function App() {
   const seacrhPressed = async (input) => {
     setIsResponseFly(true);
     try {
-      const [cityInfo] = await fetch(
-        `${api.geocoding}?q=${input}&appid=${api.key}`
-      ).then((res) => res.json());
-
-      const { lat, lon } = cityInfo;
-
-      const weatherResponse = await fetch(
-        `${api.weather}?lat=${lat}&lon=${lon}&appid=${api.key}&units=metric`
-      ).then((res) => res.json());
-
+      const weatherResponse = await getWeather(input);
       const haveSameElement = getSameElement(weatherResponse, weather);
 
       if (haveSameElement === true) {
@@ -64,16 +50,27 @@ function App() {
   };
 
   useEffect(() => {
-    const weather = JSON.parse(localStorage.getItem("weather"));
-    if (weather) {
-      setWeather(weather);
+    const weatherList = JSON.parse(localStorage.getItem("weather"));
+
+    const refreshWeatherList = async () => {
+      const newWeatherList = [];
+
+      for await (const weather of weatherList) {
+        const newWeatherElement = await getWeather(weather.name);
+        newWeatherList.push(newWeatherElement);
+      }
+
+      setWeather(newWeatherList);
+    };
+
+    if (weatherList?.length >= 1) {
+      refreshWeatherList();
     }
   }, []);
 
   useEffect(() => {
     if (weather.length === 0) return;
     localStorage.setItem("weather", JSON.stringify(weather));
-    console.log(weather.at(-1), 111);
   }, [weather]);
 
   const removeWidget = (index) => {

@@ -1,11 +1,19 @@
 import { useContext } from "react";
 import { useTheme } from "./DayNightTheme";
+import "./index.css";
 
 const ThemeSwitcher = () => {
   const { theme, toggleTheme } = useTheme();
   return (
     <div>
-      <button className="switch-button" onClick={toggleTheme}>Switch Theme</button>
+      <div className="container">
+        <input className="input-check" type="checkbox" id="darkmode-toggle" />
+        <label
+          onClick={toggleTheme}
+          for="darkmode-toggle"
+          className="button-check"
+        ></label>
+      </div>
       {/* <p className="themeName">Ваша тема: {theme}</p> */}
     </div>
   );
