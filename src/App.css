@@ -13,6 +13,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  row-gap: 100px;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
@@ -30,10 +31,12 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
 @font-face {
-  font-family: WeatherFont; 
-  src: url("C:\Users\Lerak\Downloads\sweater_weather\Sweater Weather.otf");
+  font-family: WeatherFont;
+  src: url("./assets/fonts/Sweater Weather.otf") format("opentype");
 }
+
 
 .app-name {
   color: white;
